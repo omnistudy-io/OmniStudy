@@ -1,0 +1,83 @@
+version: '3.8'
+name: omnistudy
+
+# Define the services/containers to be run
+services:
+  # MySQL Database
+  db: 
+    image: mysql/mysql-server:latest
+    container_name: database
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_ROOT_PASSWORD=testing
+      - MYSQL_DATABASE=omnistudy
+    expose:
+      - "3306"
+    ports:
+      - "3307:3306"
+    volumes:
+      - db:/var/lib/mysql
+
+  # Express API Application
+  app: 
+    image: omnistudy/express
+    container_name: express
+    depends_on: 
+      - db
+    build: ./server
+    command: 
+    develop:
+      watch:
+        - action: sync
+          path: ./server/src
+          target: ./server/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: server/package.json
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=testing
+      - DB_NAME=omnistudy
+      - DB_PORT=3306
+      - PORT=8080
+    stdin_open: true
+    tty: true
+  
+  # Nginx React Web Server
+  frontend:
+    image: omnistudy/frontend
+    container_name: frontend
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    command:
+    develop:
+      watch:
+        - action: sync
+          path: ./client/src
+          target: ./client/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: client/package.json
+    ports:
+      - "3000:3000"
+      - "80:80"
+      - "443:443"
+    environment:
+      - PORT=80
+
+networks:
+  default:
+    name: omnistudy
+    external: true
+
+
+volumes:
+  db:

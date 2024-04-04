@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  web:
+    container_name: web
+    build: ./web
+    ports: 
+      - 3000:3000
+    environment:
+      PORT: 3000
+    develop:
+      watch:
+        - action: sync
+          path: ./web/src
+          target: ./web/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: web/package.json
+  api:
+    container_name: api
+    build: ./api
+    ports:
+      - 3001:3001
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: testing
+      DB_NAME: omnistudy
+      DB_PORT: 3306
+      PORT: 3001
+      JWT_SECRET: 7dhfDF^WbE09FDj73jk
+      TOKEN_HEADER: x-access-token
+    develop:
+      watch:
+        - action: sync
+          path: ./api
+          target: ./api
+        - action: rebuild
+          path: api/package.json
+  db:
+    container_name: db
+    image: mysql/mysql-server:latest
+    ports:
+      - 3306:3306
+    volumes:
+      - omnistudy:/var/data/mysql
+
+volumes:
+  omnistudy:
