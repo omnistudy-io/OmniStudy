@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-  web:
-    container_name: web
-    build: ./web
+  app:
+    container_name: app
+    build: ./app
     ports: 
       - 3000:3000
     environment:
@@ -11,12 +11,12 @@ services:
     develop:
       watch:
         - action: sync
-          path: ./web/src
-          target: ./web/src
+          path: ./app/src
+          target: ./app/src
           ignore:
             - node_modules/
         - action: rebuild
-          path: web/package.json
+          path: app/package.json
   api:
     container_name: api
     build: ./api
