@@ -31,6 +31,8 @@ services:
       PORT: 3001
       JWT_SECRET: 7dhfDF^WbE09FDj73jk
       TOKEN_HEADER: x-access-token
+      PROJECT_ID: omnistudy-staging
+      BUCKET_NAME: omnistudy-staging
     develop:
       watch:
         - action: sync
