@@ -8,15 +8,15 @@ services:
       - 3000:3000
     environment:
       PORT: 3000
-    develop:
-      watch:
-        - action: sync
-          path: ./app/src
-          target: ./app/src
-          ignore:
-            - node_modules/
-        - action: rebuild
-          path: app/package.json
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: ./app/src
+    #       target: ./app/src
+    #       ignore:
+    #         - node_modules/
+    #     - action: rebuild
+    #       path: app/package.json
   api:
     container_name: api
     build: ./api
@@ -33,13 +33,13 @@ services:
       TOKEN_HEADER: x-access-token
       PROJECT_ID: omnistudy-staging
       BUCKET_NAME: omnistudy-staging
-    develop:
-      watch:
-        - action: sync
-          path: ./api
-          target: ./api
-        - action: rebuild
-          path: api/package.json
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: ./api
+    #       target: ./api
+    #     - action: rebuild
+    #       path: api/package.json
   db:
     container_name: db
     image: mysql/mysql-server:latest

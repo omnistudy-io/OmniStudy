@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cache="1"
+
+while getopts "c:" opt; do
+    case $opt in
+        c) cache=${OPTARG};;
+        \?) echo "Invalid option: -$OPTARG";;
+    esac
+done
+
+echo "cache: $cache"
+
+echo "basename : [$(basename "$0")]"
+echo "dirname : [$(dirname "$0")]"
+echo "pwd     : [$(pwd)]"
+echo "realpath: [$(dirname $(realpath "$0"))]"
